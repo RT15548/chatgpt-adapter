@@ -183,12 +183,15 @@ func (h *Handler) generations(gtx *gin.Context) {
 //
 // ")
 func (h *Handler) models(gtx *gin.Context) {
-	models := make([]model.Model, 0)
-	for _, extension := range h.extensions {
-		models = append(models, extension.Models()...)
-	}
-	gtx.JSON(200, gin.H{
-		"object": "list",
-		"data":   models,
-	})
-}
+    models := make([]model.Model, 0)
+    for _, extension := range h.extensions {
+        for _, m := range extension.Models() {
+            if m.Id == "grok-2" || m.Id == "grok-3" {
+                models = append(models, m)
+            }
+        }
+    }
+    gtx.JSON(200, gin.H{
+        "object": "list",
+        "data":   models,
+    })
